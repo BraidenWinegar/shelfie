@@ -20,8 +20,9 @@ massive(CONNECTION_STRING)
     
     //endpoints
     app.get('/api/inventory', ctrl.getInventory )
-    // app.post('/api/comments', ctrl.addComment )
-    // app.put('/api/comments/:id', ctrl.updateComment )
+    app.post('/api/inventory', ctrl.addProduct )
+    app.put('/api/inventory/:id', ctrl.updateProduct )
+    app.delete('/api/inventory/:id', ctrl.deleteProduct)
 
     
     app.listen(SERVER_PORT, console.log(`server on ${SERVER_PORT}`))

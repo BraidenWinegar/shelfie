@@ -1,28 +1,38 @@
 
+
 module.exports ={
     getInventory: (req, res, next) =>{
         const db = req.app.get('db')
 
-        db.get_comments()
-        .then(dbResponse => res.status(200).send(dbResponse))
+        db.get_inventory()
+        .then(dbRes => res.status(200).send(dbRes))
         .catch(err => {
-            res.status(500).send({errorMessage: 'oops'})
+            res.status(500).send(console.log('failed db.get'))
         })
+    },
+
+    addProduct: (req, res) => {
+        const {product_name, price, image_url} = req.body;
+        const db = req.app.get('db');
+        db.add_product(product_name, price, image_url).then(users =>{
+            res.sendStatus(200)
+        })
+        .catch(err => res.status(500).send(err))
+    },
+
+    updateProduct: (req, res) => {
+        const db = req.app.get('db')
+        const {id} = req.params
+        const {product_name, price, image_url} = req.body
+        db.update([id, product_name, price, image_url])
+        .then(data => res.sendStatus(200))
+    },
+
+    deleteProduct: (req, res) => {
+        const db = req.app.get('db')
+        const {id} = req.params
+        console.log('delete hit')
+        db.delete(id)
+        .then(data => res.status(200).send(data))
     }
-
-    // addComment: (req, res, next) => {
-    //     const db = req.app.get('db')
-    //     const {topic, text} = req.body
-
-    //     db.add_comment([topic, text])
-    //     .then(data => res.status(200).send(data))
-    // },
-
-    // updateComment: (req, res) => {
-    //     const db = req.app.get('db')
-    //     const {id} = req.params
-    //     const {topic, text} = req.body
-    //     db.update([id, topic, text])
-    //     .then(data => res.status(200).send(data))
-    // }
 }
